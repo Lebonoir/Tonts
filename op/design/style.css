@@ -1,0 +1,688 @@
+/* The font loads from Google Fonts. If you're offline, the browser
+   falls back to system-ui, so nothing breaks. (@import must stay on top.) */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+/* ============ COLORS (change them here and the whole site follows) ============ */
+:root {
+  --navy: #1a1a2e;      /* header, headings */
+  --navy-light: #16213e;/* second color for the header gradient */
+  --teal: #4fd1c5;      /* main accent, buttons */
+  --teal-dark: #38b2a6; /* button hover */
+  --line: #e5e9f2;      /* soft borders */
+  --soft: #f8fafc;      /* soft box background */
+  --muted: #64748b;     /* gray helper text */
+  --text: #222;         /* main text */
+  --page: #f4f6fb;     /* page background */
+
+  --radius: 12px;       /* big corners: cards, forms */
+  --radius-sm: 8px;     /* small corners: inputs, buttons */
+  --shadow: 0 4px 16px rgba(26, 26, 46, 0.08);
+}
+
+/* Removes the browser's default spacing so every page starts clean */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+  line-height: 1.6;
+  color: var(--text);
+  /* soft page color with a faint teal glow at the top so the white card stands out */
+  background:
+    radial-gradient(900px 300px at 50% 0, rgba(79, 209, 197, 0.12), transparent),
+    var(--page);
+  min-height: 100vh;
+  display: flex;            /* keeps the footer at the bottom on short pages */
+  flex-direction: column;
+}
+
+/* Highlighted text looks on-brand */
+::selection {
+  background: var(--teal);
+  color: var(--navy);
+}
+
+/* A visible ring when someone uses the keyboard (Tab) to move around */
+:focus-visible {
+  outline: 3px solid var(--teal);
+  outline-offset: 2px;
+}
+
+/* ============ HEADER ============ */
+.site-header {
+  background: linear-gradient(135deg, var(--navy), var(--navy-light));
+  border-bottom: 3px solid var(--teal);
+  padding: 1rem 2rem;
+  position: sticky;   /* stays visible while you scroll */
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 12px rgba(26, 26, 46, 0.25);
+}
+
+.site-header nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; /* links drop to the next line on small screens */
+  gap: 0.75rem;
+}
+
+.site-header .logo {
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.25rem;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+}
+
+.site-header .logo:hover {
+  text-decoration: none;
+  color: var(--teal);
+}
+
+.nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  gap: 0.5rem 1.5rem;
+}
+
+.nav-links a {
+  position: relative;
+  color: #eee;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 0.25rem 0;
+  transition: color 0.2s;
+}
+
+/* the teal underline slides in when you hover a link (or mark one with class="active") */
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--teal);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--teal);
+  text-decoration: none;
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after {
+  transform: scaleX(1);
+}
+
+/* ============ LOGGED IN USER (shown in header) ============ */
+.nav-links .user-info {
+  color: var(--teal);
+  font-weight: 600;
+  padding: 0.2rem 0.8rem;
+  border: 1px solid rgba(79, 209, 197, 0.5);
+  border-radius: 999px;
+}
+
+/* ============ PAGE CONTENT ============ */
+/* Every page's unique content goes inside this white card */
+.content {
+  flex: 1;
+  width: calc(100% - 2rem);
+  padding: 2rem 2.25rem;
+  max-width: 900px;
+  margin: 2rem auto;
+  background: white;
+  border-radius: var(--radius);
+  border-top: 5px solid var(--teal);
+  box-shadow: var(--shadow);
+  animation: rise 0.5s ease both; /* the only automatic animation: the card eases in on page load */
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============ FOOTER ============ */
+.site-footer {
+  text-align: center;
+  padding: 1.25rem 1rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  border-top: 1px solid var(--line);
+  margin-top: 2rem;
+}
+
+/* ============ HEADINGS AND TEXT ============ */
+h2 {
+  color: var(--navy);
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-bottom: 1.2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 3px solid var(--teal);
+}
+
+h3 {
+  color: var(--navy);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 1.8rem 0 0.8rem;
+  padding-left: 0.6rem;
+  border-left: 4px solid var(--teal);
+}
+
+.content p {
+  color: #444;
+  margin-bottom: 1rem;
+  max-width: 70ch; /* keeps lines easy to read */
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 1.8rem 0;
+}
+
+/* ============ FORMS ============ */
+/* the label text sits above each box because the boxes are full width */
+form {
+  max-width: 480px;
+  background: var(--soft);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.5rem 1.6rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: #333;
+  box-shadow: 0 1px 3px rgba(26, 26, 46, 0.05);
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="date"],
+input[type="time"],
+input[type="tel"],
+input[type="number"],
+input[type="file"],
+select,
+textarea {
+  display: block;
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  margin: 0.3rem 0 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: var(--radius-sm);
+  background: #fff;
+  font: inherit;
+  font-weight: 400;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+::placeholder {
+  color: #94a3b8;
+}
+
+input:hover,
+select:hover,
+textarea:hover {
+  border-color: #94a3b8;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(79, 209, 197, 0.3);
+}
+
+/* checkboxes and radio buttons use the site's teal */
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: var(--teal-dark);
+  margin-right: 0.5rem;
+}
+
+form input + br,
+form select + br {
+  display: none; /* the boxes already end the line */
+}
+
+/* the booking policy text inside the booking form */
+form h4 {
+  margin: 0.5rem 0 0.4rem;
+  color: var(--navy);
+}
+
+form p {
+  background: #fff8e1;
+  border: 1px solid #fde68a;
+  border-left: 4px solid #f5b700;
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #5c4a00;
+}
+
+/* ============ BUTTONS ============ */
+button,
+input[type="submit"] {
+  background: var(--teal);
+  color: var(--navy);
+  border: none;
+  padding: 0.7rem 1.6rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0.5rem 0.5rem 0 0;
+  box-shadow: 0 2px 0 var(--teal-dark); /* a little "edge" so it looks pressable */
+  transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+
+button:hover,
+input[type="submit"]:hover {
+  background: var(--teal-dark);
+  transform: translateY(-1px);
+}
+
+button:active,
+input[type="submit"]:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+/* Optional: add class="secondary" or class="danger" to a button for a different look */
+button.secondary {
+  background: #fff;
+  color: var(--navy);
+  border: 1px solid #cbd5e1;
+  box-shadow: none;
+}
+
+button.secondary:hover {
+  background: var(--soft);
+  border-color: var(--teal);
+}
+
+button.danger {
+  background: #b42318;
+  color: #fff;
+  box-shadow: 0 2px 0 #8a1a11;
+}
+
+button.danger:hover {
+  background: #9b1c1c;
+}
+
+/* ============ LINKS ============ */
+a {
+  color: #1a73e8;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* The small action links (edit, delete, confirm...) become colored buttons.
+   They are found by the word in their address, so no extra code is needed in the pages. */
+.content a[href*="?id="],
+.content a[href*="deleteid"],
+.content a[href*="confirmid"],
+.content a[href*="acceptid"],
+.content a[href*="declineid"],
+.content a[href*="cancelid"],
+.content a[href*="fill="],
+.content a[href*="edit=1"],
+.content a[href*="markread"],
+.content a[href*="clear="] {
+  display: inline-block;
+  padding: 0 0.85rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.9;
+  margin: 0 0.15rem;
+  transition: filter 0.15s, transform 0.15s;
+}
+
+.content a[href*="?id="],
+.content a[href*="edit=1"],
+.content a[href*="fill="],
+.content a[href*="markread"] {
+  background: #e8f0fe;
+  color: #1a56db; /* blue = edit / open */
+}
+
+.content a[href*="confirmid"],
+.content a[href*="acceptid"] {
+  background: #dcf7e3;
+  color: #1e6b3a; /* green = yes */
+}
+
+.content a[href*="declineid"],
+.content a[href*="cancelid"] {
+  background: #ffe8d1;
+  color: #9a4a00; /* orange = no / cancel */
+}
+
+.content a[href*="deleteid"],
+.content a[href*="clear="] {
+  background: #fde2e2;
+  color: #b42318; /* red = delete */
+}
+
+.content a[href*="?id="]:hover,
+.content a[href*="deleteid"]:hover,
+.content a[href*="confirmid"]:hover,
+.content a[href*="acceptid"]:hover,
+.content a[href*="declineid"]:hover,
+.content a[href*="cancelid"]:hover,
+.content a[href*="fill="]:hover,
+.content a[href*="edit=1"]:hover,
+.content a[href*="markread"]:hover,
+.content a[href*="clear="]:hover {
+  text-decoration: none;
+  filter: brightness(0.93);
+  transform: translateY(-1px);
+}
+
+/* ============ MESSAGES (success, error...) ============ */
+/* Optional: <p class="alert success">Appointment booked!</p> */
+.alert {
+  background: #e8f0fe;
+  color: #1a56db;
+  border-left: 4px solid #1a56db;
+  border-radius: var(--radius-sm);
+  padding: 0.8rem 1rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.alert.success {
+  background: #dcf7e3;
+  color: #1e6b3a;
+  border-left-color: #1e6b3a;
+}
+
+.alert.error {
+  background: #fde2e2;
+  color: #b42318;
+  border-left-color: #b42318;
+}
+
+.alert.warning {
+  background: #fff4d6;
+  color: #8a5a00;
+  border-left-color: #f5b700;
+}
+
+/* ============ LISTS OF RECORDS (appointments, accounts, notifications...) ============ */
+.record {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--teal); /* teal edge makes each record easy to spot */
+  border-radius: 10px;
+  padding: 0.6rem 1rem;
+  margin-bottom: 0.6rem;
+  line-height: 2;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.record:hover {
+  border-color: var(--teal);
+  box-shadow: 0 2px 8px rgba(26, 26, 46, 0.08);
+}
+
+.empty {
+  background: var(--soft);
+  border: 1px dashed #cbd5e1;
+  border-radius: 10px;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* ============ STATUS BADGES ============ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0 0.75rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.7;
+  background: #eef0f4;
+  color: #475569;
+}
+
+/* a small dot in the badge's own color, so status isn't shown by color fill alone */
+.badge::before {
+  content: "";
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.badge.pending {
+  background: #fff4d6;
+  color: #8a5a00;
+}
+
+.badge.approved {
+  background: #dcf7e3;
+  color: #1e6b3a;
+}
+
+.badge.completed {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.badge.cancelled {
+  background: #fde2e2;
+  color: #9b1c1c;
+}
+
+.badge.cancellation-requested {
+  background: #ffe8d1;
+  color: #9a4a00;
+}
+
+/* ============ DASHBOARD NUMBER CARDS ============ */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 0.75rem;
+}
+
+.stat {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--teal);
+  border-radius: var(--radius);
+  padding: 1.1rem 0.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.stat b {
+  display: block;
+  font-size: 2.1rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--navy);
+}
+
+/* ============ AVAILABLE TIMES ============ */
+.slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.slot {
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.slot.available {
+  background: #dcf7e3;
+  color: #1e6b3a;
+  border-color: #b7ebc6;
+}
+
+.slot.booked {
+  background: #eef0f4;
+  color: #94a3b8;
+  text-decoration: line-through;
+}
+
+/* ============ TABLES (not used yet, ready for later) ============ */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background: #fff;
+  border: 1px solid var(--line);
+}
+
+table th {
+  background: var(--navy);
+  color: white;
+  padding: 12px 14px;
+  text-align: left;
+  font-weight: 600;
+}
+
+table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+table tr:nth-child(even) {
+  background: #f7f9fc;
+}
+
+table tr:hover {
+  background: #eef6ff;
+}
+
+.account-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  border: 1px solid var(--line);
+}
+
+.account-table th,
+.account-table td {
+  border: 1px solid var(--line);
+  padding: 12px 14px;
+}
+
+.account-table th {
+  background: var(--navy);
+  color: white;
+  text-align: left;
+  font-weight: 600;
+}
+
+.account-table tr:nth-child(even) {
+  background: #f7f9fc;
+}
+
+.account-table tr:hover {
+  background: #eef6ff;
+}
+
+/* Delete link */
+
+.delete-btn {
+  color: #d11a2a;
+  font-weight: bold;
+}
+
+.delete-btn:hover {
+  color: darkred;
+}
+
+/* ============ SMALL SCREENS (phones) ============ */
+@media (max-width: 600px) {
+  .site-header {
+    padding: 0.8rem 1rem;
+    position: static; /* a sticky header would take too much of a small screen */
+  }
+
+  .content {
+    padding: 1.25rem;
+    margin: 1rem auto;
+  }
+
+  h2 {
+    font-size: 1.45rem;
+  }
+
+  form {
+    max-width: 100%;
+    padding: 1.1rem;
+  }
+
+  /* wide tables scroll sideways instead of breaking the page */
+  table,
+  .account-table {
+    display: block;
+    overflow-x: auto;
+  }
+}
+
+/* People who turned off animations in their device settings get none */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
