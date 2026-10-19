@@ -29,7 +29,12 @@ if (isset($_POST['save'])) {
 //updated delete w/ confirmation
 if (isset($_GET['deleteid'])) {
     $id = $_GET['deleteid'];
-    echo "Do you really want to delete record with ID of $id? <a href='?yesdelete=$id'>Yes</a> | <a href='$page'>No</a>";
+    $title = "Delete this service?";
+    $question = "Do you really want to delete record with ID of $id?";
+    $yes = "?yesdelete=$id";
+    $no = $page;
+    $danger = true;
+    include "../header_footer/confirm.php";
     exit();
 }
 
@@ -44,15 +49,22 @@ include "../header_footer/header.php";
 ?>
 
 <h2>Manage Services</h2>
-<?php echo $error; ?>
+<?php if ($error != "") { echo "<div class='alert error'>$error</div>"; } ?>
 
+<div class="split">
+<section class="panel">
+<h3>New service</h3>
 <form method="post">
-    Service name: <input type="text" name="name" required><br>
-    Price: <input type="number" name="price" step="0.01" required><br>
+    <label class="field"><span>Service name</span><input type="text" name="name" required></label>
+    <label class="field"><span>Price</span><input type="number" name="price" step="0.01" required></label>
+    <div class="form-actions">
     <button type="submit" name="save">Add service</button>
+    </div>
 </form>
-<hr>
+</section>
 
+<section class="list">
+<h3>All services</h3>
 <?php
 $sql = "SELECT * FROM services";
 $column_mappings = [
@@ -62,5 +74,7 @@ $column_mappings = [
 ];
 display($sql, $column_mappings, $page);
 ?>
+</section>
+</div>
 
 <?php include "../header_footer/footer.php"; ?>

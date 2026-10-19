@@ -96,7 +96,12 @@ if (isset($_GET['declineid'])) {
 //updated delete w/ confirmation
 if (isset($_GET['deleteid'])) {
     $id = $_GET['deleteid'];
-    echo "Do you really want to delete record with ID of $id? <a href='?yesdelete=$id'>Yes</a> | <a href='$page'>No</a>";
+    $title = "Delete this appointment?";
+    $question = "Do you really want to delete record with ID of $id?";
+    $yes = "?yesdelete=$id";
+    $no = $page;
+    $danger = true;
+    include "../header_footer/confirm.php";
     exit();
 }
 
@@ -121,26 +126,35 @@ include "../header_footer/header.php";
 ?>
 
 <h2>Manage Appointments</h2>
-<?php
-echo $error;
-echo "<h3>$title</h3>";
-?>
+<?php if ($error != "") { echo "<div class='alert error'>$error</div>"; } ?>
+
+<div class="split">
+<section class="panel">
+<?php echo "<h3>$title</h3>"; ?>
 <form method="post">
-    Name: <input type="text" name="name" value="<?php echo $row['name']; ?>" required><br>
-    Contact: <input type="text" name="contact" value="<?php echo $row['contact']; ?>" maxlength="11" required><br>
-    Email: <input type="email" name="email" value="<?php echo $row['email']; ?>"><br>
-    Date: <input type="date" name="date" value="<?php echo $row['date']; ?>" required><br>
-    Time: <select name="time"><?php list_options($slots, substr($row['time'], 0, 5)); ?></select><br>
-    Service: <select name="service"><?php options("services", "name", $row['service']); ?></select><br>
-    Status: <select name="status"><?php list_options(["pending", "approved", "completed", "cancelled"], $row['status']); ?></select><br>
+    <label class="field"><span>Name</span><input type="text" name="name" value="<?php echo $row['name']; ?>" required></label>
+    <div class="field-row">
+        <label class="field"><span>Contact</span><input type="text" name="contact" value="<?php echo $row['contact']; ?>" maxlength="11" required></label>
+        <label class="field"><span>Email</span><input type="email" name="email" value="<?php echo $row['email']; ?>"></label>
+    </div>
+    <div class="field-row">
+        <label class="field"><span>Date</span><input type="date" name="date" value="<?php echo $row['date']; ?>" required></label>
+        <label class="field"><span>Time</span><select name="time"><?php list_options($slots, substr($row['time'], 0, 5)); ?></select></label>
+    </div>
+    <label class="field"><span>Service</span><select name="service"><?php options("services", "name", $row['service']); ?></select></label>
+    <label class="field"><span>Status</span><select name="status"><?php list_options(["pending", "approved", "completed", "cancelled"], $row['status']); ?></select></label>
+    <div class="form-actions">
     <button type="submit" name="save">Save</button>
     <?php
     if ($id != 0) {
         echo "<a href='$page'>Cancel</a>";
     }
     ?>
+    </div>
 </form>
-<hr>
+</section>
+
+<section class="list">
 
 <?php
 $column_mappings = [
@@ -160,19 +174,19 @@ $column_mappings = [
 $sql = "SELECT * FROM appointments WHERE status = 'pending' AND cancel_requested = 0 ORDER BY date, time";
 display($sql, $column_mappings, $page, $page, ["confirm" => $page]);
 ?>
-<hr>
 
 <h3>Cancellation requests - waiting for approval</h3>
 <?php
 $sql = "SELECT * FROM appointments WHERE cancel_requested = 1 ORDER BY date, time";
 display($sql, $column_mappings, "", "", ["accept" => $page, "decline" => $page]);
 ?>
-<hr>
 
 <h3>Other appointments</h3>
 <?php
 $sql = "SELECT * FROM appointments WHERE status != 'pending' AND cancel_requested = 0 ORDER BY date, time";
 display($sql, $column_mappings, $page, $page);
 ?>
+</section>
+</div>
 
 <?php include "../header_footer/footer.php"; ?>

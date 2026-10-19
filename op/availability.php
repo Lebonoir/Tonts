@@ -18,11 +18,10 @@ include "header_footer/header.php";
 
 <h2>Available Dates and Times</h2>
 
-<form method="get">
-    Date: <input type="date" name="date" value="<?php echo $date; ?>" min="<?php echo date("Y-m-d"); ?>" required>
+<form method="get" class="inline-form">
+    <label class="field"><span>Date</span><input type="date" name="date" value="<?php echo $date; ?>" min="<?php echo date("Y-m-d"); ?>" required></label>
     <button type="submit">Check</button>
 </form>
-<hr>
 
 <?php
 echo "<h3>$date</h3>";
@@ -43,7 +42,7 @@ foreach ($slots as $time) {
 echo "</div>";
 
 if ($shown == 0) {
-    echo "No times left on this date.";
+    echo "<p class='empty'>No times left on this date.</p>";
 }
 ?>
 

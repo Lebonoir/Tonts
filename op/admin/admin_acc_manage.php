@@ -62,7 +62,12 @@ if (isset($_POST['save'])) {
 //updated delete w/ confirmation
 if (isset($_GET['deleteid'])) {
     $id = $_GET['deleteid'];
-    echo "Do you really want to delete record with ID of $id? <a href='?yesdelete=$id'>Yes</a> | <a href='$page'>No</a>";
+    $title = "Delete this account?";
+    $question = "Do you really want to delete record with ID of $id?";
+    $yes = "?yesdelete=$id";
+    $no = $page;
+    $danger = true;
+    include "../header_footer/confirm.php";
     exit();
 }
 
@@ -79,33 +84,40 @@ include "../header_footer/header.php";
 ?>
 
 <h2>Manage Accounts</h2>
-<?php
-echo $error;
-echo "<h3>$title</h3>";
-?>
+<?php if ($error != "") { echo "<div class='alert error'>$error</div>"; } ?>
+
+<div class="split">
+<section class="panel">
+<?php echo "<h3>$title</h3>"; ?>
 <form method="post" enctype="multipart/form-data">
-    Full name: <input type="text" name="fullname" value="<?php echo $row['fullname']; ?>" required><br>
-    Username: <input type="text" name="username" value="<?php echo $row['username']; ?>" required><br>
-    Contact: <input type="text" name="contact" value="<?php echo $row['contact']; ?>" maxlength="11" required><br>
-    Email: <input type="email" name="email" value="<?php echo $row['email']; ?>" required><br>
+    <label class="field"><span>Full name</span><input type="text" name="fullname" value="<?php echo $row['fullname']; ?>" required></label>
+    <label class="field"><span>Username</span><input type="text" name="username" value="<?php echo $row['username']; ?>" required></label>
+    <div class="field-row">
+        <label class="field"><span>Contact</span><input type="text" name="contact" value="<?php echo $row['contact']; ?>" maxlength="11" required></label>
+        <label class="field"><span>Email</span><input type="email" name="email" value="<?php echo $row['email']; ?>" required></label>
+    </div>
 
     <?php if ($id == 0) { ?>
-        Password: <input type="password" name="password" required><br>
-        Photo: <input type="file" name="photo" accept="image/*"><br>
+        <label class="field"><span>Password</span><input type="password" name="password" required></label>
+        <label class="field"><span>Photo</span><input type="file" name="photo" accept="image/*"></label>
     <?php } else { ?>
-        Password: <input type="password" name="password"> (leave blank to keep current)<br>
+        <label class="field"><span>Password</span><input type="password" name="password"><small>Leave blank to keep current</small></label>
     <?php } ?>
 
-    Role: <select name="role"><?php list_options(["staff", "admin", "customer"], $row['role']); ?></select><br>
+    <label class="field"><span>Role</span><select name="role"><?php list_options(["staff", "admin", "customer"], $row['role']); ?></select></label>
+    <div class="form-actions">
     <button type="submit" name="save">Save</button>
     <?php
     if ($id != 0) {
         echo "<a href='$page'>Cancel</a>";
     }
     ?>
+    </div>
 </form>
-<hr>
+</section>
 
+<section class="list">
+<h3>All accounts</h3>
 <?php
 $sql = "SELECT * FROM accounts";
 $column_mappings = [
@@ -116,5 +128,7 @@ $column_mappings = [
 ];
 display($sql, $column_mappings, $page, $page); // reusable display (accounts)
 ?>
+</section>
+</div>
 
 <?php include "../header_footer/footer.php"; ?>

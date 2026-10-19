@@ -23,9 +23,10 @@ include "header_footer/header.php";
 ?>
 
 <h2>Notifications</h2>
-<a href="notifications.php?markread=1">Mark all as read</a> |
-<a href="notifications.php?clear=1">Clear all</a>
-<hr>
+<div class="toolbar">
+    <a href="notifications.php?markread=1">Mark all as read</a>
+    <a href="notifications.php?clear=1">Clear all</a>
+</div>
 
 <?php
 $sql = "SELECT *, IF(seen = 0, '[NEW] ', '') AS tag FROM notifications WHERE account_id = $id ORDER BY id DESC";

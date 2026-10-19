@@ -43,24 +43,32 @@ include "../header_footer/header.php";
 ?>
 
 <h2>Edit Appointment</h2>
-<?php echo $error; ?>
+<?php if ($error != "") { echo "<div class='alert error'>$error</div>"; } ?>
+<section class="panel narrow">
 <form method="post">
     <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-    Name: <input type="text" name="name" value="<?php echo $row['name']; ?>" required><br>
-    Contact: <input type="text" name="contact" value="<?php echo $row['contact']; ?>" maxlength="11" required><br>
-    Email: <input type="email" name="email" value="<?php echo $row['email']; ?>"><br>
-    Date: <input type="date" name="date" value="<?php echo $row['date']; ?>" required><br>
-    Time: <input type="time" name="time" value="<?php echo $row['time']; ?>" required><br>
-    Service: <select name="service"><?php options("services", "name", $row['service']); ?></select><br>
-    Status:
+    <label class="field"><span>Name</span><input type="text" name="name" value="<?php echo $row['name']; ?>" required></label>
+    <div class="field-row">
+        <label class="field"><span>Contact</span><input type="text" name="contact" value="<?php echo $row['contact']; ?>" maxlength="11" required></label>
+        <label class="field"><span>Email</span><input type="email" name="email" value="<?php echo $row['email']; ?>"></label>
+    </div>
+    <div class="field-row">
+        <label class="field"><span>Date</span><input type="date" name="date" value="<?php echo $row['date']; ?>" required></label>
+        <label class="field"><span>Time</span><input type="time" name="time" value="<?php echo $row['time']; ?>" required></label>
+    </div>
+    <label class="field"><span>Service</span><select name="service"><?php options("services", "name", $row['service']); ?></select></label>
+    <label class="field"><span>Status</span>
     <select name="status">
         <option value="pending"   <?php if ($row['status'] == "pending")   echo "selected"; ?>>pending</option>
         <option value="approved"  <?php if ($row['status'] == "approved")  echo "selected"; ?>>approved</option>
         <option value="completed" <?php if ($row['status'] == "completed") echo "selected"; ?>>completed</option>
         <option value="cancelled" <?php if ($row['status'] == "cancelled") echo "selected"; ?>>cancelled</option>
-    </select><br>
+    </select></label>
+    <div class="form-actions">
     <button type="submit" name="update">Update</button>
+    <a href="staff_appointments.php">Back</a>
+    </div>
 </form>
-<a href="staff_appointments.php">Back</a>
+</section>
 
 <?php include "../header_footer/footer.php"; ?>

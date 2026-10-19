@@ -55,7 +55,12 @@ if (isset($_POST['book'])) {
 // request to cancel (staff or admin has to approve it first)
 if (isset($_GET['cancelid'])) {
     $id = (int)$_GET['cancelid'];
-    echo "Do you really want to request cancellation of appointment with ID of $id? <a href='?yescancel=$id'>Yes</a> | <a href='$page'>No</a>";
+    $title = "Request cancellation?";
+    $question = "Do you really want to request cancellation of appointment with ID of $id?";
+    $yes = "?yescancel=$id";
+    $no = $page;
+    $danger = false;
+    include "../header_footer/confirm.php";
     exit();
 }
 
@@ -77,29 +82,44 @@ include "../header_footer/header.php";
 ?>
 
 <h2>Book an Appointment</h2>
-<?php echo $error; ?>
-<p>Your booking has to be confirmed by our staff first. Check the status below.</p>
+<?php if ($error != "") { echo "<div class='alert error'>$error</div>"; } ?>
+<p class="lead">Your booking has to be confirmed by our staff first. Check the status below.</p>
 
-<a href="customer_book.php?fill=1">Fill in my details</a> (uses the details saved in My Account)
+<div class="split">
+<section class="panel">
+<div class="fill-row">
+    <a href="customer_book.php?fill=1">Fill in my details</a>
+    <small>Uses the details saved in My Account</small>
+</div>
 
 <form method="post">
-    Name: <input type="text" name="name" value="<?php echo $name; ?>" required><br>
-    Contact: <input type="text" name="contact" value="<?php echo $contact; ?>" maxlength="11" required><br>
-    Email: <input type="email" name="email" value="<?php echo $email; ?>"><br>
-    Date: <input type="date" name="date" required><br>
-    Time: <select name="time"><?php list_options($slots); ?></select><br>
-    Service: <select name="service"><?php options("services", "name"); ?></select><br>
+    <label class="field"><span>Name</span><input type="text" name="name" value="<?php echo $name; ?>" required></label>
+    <div class="field-row">
+        <label class="field"><span>Contact</span><input type="text" name="contact" value="<?php echo $contact; ?>" maxlength="11" required></label>
+        <label class="field"><span>Email</span><input type="email" name="email" value="<?php echo $email; ?>"></label>
+    </div>
+    <div class="field-row">
+        <label class="field"><span>Date</span><input type="date" name="date" required></label>
+        <label class="field"><span>Time</span><select name="time"><?php list_options($slots); ?></select></label>
+    </div>
+    <label class="field"><span>Service</span><select name="service"><?php options("services", "name"); ?></select></label>
 
-    <h4>Booking Policy</h4>
-    <p>
-        1. Arriving too early or too late will not be tolerated or compensated by the system.<br>
-        2. Refunds are only available once a valid proof and proper communication to the owner/admin is made.
-    </p>
-    <input type="checkbox" name="agree" required> I have read and agree to the booking policy<br>
+    <div class="policy">
+        <h4>Booking Policy</h4>
+        <ol>
+            <li>Arriving too early or too late will not be tolerated or compensated by the system.</li>
+            <li>Refunds are only available once a valid proof and proper communication to the owner/admin is made.</li>
+        </ol>
+    </div>
+    <label class="check"><input type="checkbox" name="agree" required> <span>I have read and agree to the booking policy</span></label>
 
+    <div class="form-actions">
     <button type="submit" name="book">Book</button>
+    </div>
 </form>
-<hr>
+</section>
+
+<section class="list">
 
 <?php
 $column_mappings = [
@@ -122,11 +142,12 @@ $sql = "SELECT id, service, date, time, 'cancellation requested' AS status FROM 
 display($sql, $column_mappings, "");
 ?>
 
-<hr>
 <h3>Already Booked</h3>
 <?php
 $sql = "SELECT * FROM appointments WHERE status = 'approved' AND date >= CURDATE() ORDER BY date, time";
 display($sql, ["date" => "Date: ", "time" => " | Time: "], ""); // only date and time are shown
 ?>
+</section>
+</div>
 
 <?php include "../header_footer/footer.php"; ?>
